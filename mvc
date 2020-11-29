@@ -77,6 +77,7 @@
         $cfile = __DIR__.'/application/controllers/'.strtolower($name).'.php';
         if(file_Exists($cfile)){
             echo "\nController file {$cfile} already exists!";
+            die("\n\n");
         }
         else {
             file_put_contents($cfile,$template);
