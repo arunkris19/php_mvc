@@ -9,30 +9,31 @@
     $switch = $commands[1]; // command (-g : generate,-d : delete)
     $type =  $commands[2]; // component type ( view, controller, helper, model)
     $name =  $commands[3]; // name of the component;
+    $config = explode('|',$commands[4]); // config flags;
 
     switch($switch){
         case '-g':
-            generateComponent($type,$name);
+            generateComponent($type,$name,$config);
         break;
         default:
             echo 'Unknown option! Available options are -g|-d';
         break;
     }
 
-    function generateComponent($type,$name){
+    function generateComponent($type,$name,$config){
         echo "\n\nGenerating `{$type}`:{$name}";
         switch($type){
             case 'view':
-                generateView($name);
+                generateView($name,$config);
             break;
             case 'widget':
-                generateWidget($name);
+                generateWidget($name,$config);
             break;
             case 'controller':
-                generateController($name);
+                generateController($name,$config);
             break;
             case 'component':
-                generateController($name);
+                generateController($name,$config);
                 generateView($name);
             break;
             default:
@@ -41,7 +42,7 @@
         }
     }
 
-    function generateWidget($name){
+    function generateWidget($name,$config){
         $wdir = __DIR__.'/application/widgets/'.$name.'/';
         if(!is_dir($wdir)){
             echo "\nCreating widget dir:".$wdir;
@@ -61,18 +62,27 @@
                 return;
             }
         }
-        if(copy(__DIR__.'/__tools/widget/widget.html',$wdir.'widget.php')){
-            
-            copy(__DIR__.'/__tools/widget/widget.css.inc',$wdir.'styles.php');
-            echo "\nWidget template is successfully generated in {$wdir}!";
-            echo "\nFinished...";
-            
+        /* if --skip-style is not specified */
+        if(array_search('--skip-style',$config) === FALSE){
+            if(copy(__DIR__.'/__tools/widget/widget.html',$wdir.'widget.php')){
+                copy(__DIR__.'/__tools/widget/widget.css.inc',$wdir.'styles.php');
+            }
+            else{
+                echo "\nView folder {$wdir} is not accessible!";
+                return;
+            }    
         }else{
-            echo "\nView folder {$wdir} is not accessible!";
+            if(!copy(__DIR__.'/__tools/widget/widget.only.html',$wdir.'widget.php')){
+                echo "\nView folder {$wdir} is not accessible!";
+                return;
+            }
         }
+        
+        echo "\nWidget template is successfully generated in {$wdir}!";
+        echo "\nFinished...";
     }
 
-    function generateView($name){
+    function generateView($name,$config){
         $vdir = __DIR__.'/application/views/'.$name.'/';
         if(!is_dir($vdir)){
             echo "\nCreating view dir:".$vdir;
@@ -92,9 +102,11 @@
                 return;
             }
         }
-        if(copy(__DIR__.'/__tools/view/header.html',$vdir.'header.php')){
-            copy(__DIR__.'/__tools/view/view.html',$vdir.'view.php');
-            copy(__DIR__.'/__tools/view/footer.html',$vdir.'footer.php');
+        if(copy(__DIR__.'/__tools/view/header.html',$vdir.'view.php')){
+            if(array_search('--skip-head',$config) === FALSE){
+                copy(__DIR__.'/__tools/view/view.html',$vdir.'header.php');
+                copy(__DIR__.'/__tools/view/footer.html',$vdir.'footer.php');
+            }
 
             echo "\nView files are successfully generated in {$vdir}!";
             echo "\nFinished...";
@@ -104,7 +116,7 @@
         }
     }
     
-    function generateController($name){
+    function generateController($name,$config){
         $name .= 'Controller';
         $template = file_get_contents(__DIR__.'/__tools/controller/controller.tpl');
         $template = str_replace('~CONTROLER_NAME~',ucwords($name),$template);
