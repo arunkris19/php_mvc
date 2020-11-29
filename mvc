@@ -63,7 +63,7 @@
         }
         if(copy(__DIR__.'/__tools/widget/widget.html',$wdir.'widget.php')){
             
-            copy(__DIR__.'/__tools/widget/widget.css',$wdir.'styles.php');
+            copy(__DIR__.'/__tools/widget/widget.css.inc',$wdir.'styles.php');
             echo "\nWidget template is successfully generated in {$wdir}!";
             echo "\nFinished...";
             
