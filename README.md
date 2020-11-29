@@ -36,6 +36,15 @@ This will create a new view with the specified name, **store/list** here in this
 it will ask for a new name and you can specify the new name and it will create the view. The name of the view can be a deep directory path
 like **/store/max/jeans** and the script will automatically create those directories for you and will keep the view files inside the last directory.
 
+Create a Widget by running the following command from the root directory. 
+
+> php mvc -g widget login
+
+Widgets are tiny HTML components that you can embed in the main view files. For example, you can create a login widget and embed the same widget anywhere you want it. You can add widgets as given below.
+
+**In your controller class**
+> $this->_view->addWidget('login_widget','login'); //reference name:login_widget, actual widget name:login
+
 ### Disclaimer
 This is an experimental project and these scripts does not come with any guarentee. So please use it carefully and responsibly.
 
