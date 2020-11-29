@@ -25,6 +25,9 @@
             case 'view':
                 generateView($name);
             break;
+            case 'widget':
+                generateWidget($name);
+            break;
             case 'controller':
                 generateController($name);
             break;
@@ -35,6 +38,37 @@
             default:
                 echo "\nInvalid type specification:`".$type."`";
             break;
+        }
+    }
+
+    function generateWidget($name){
+        $wdir = __DIR__.'/application/widgets/'.$name.'/';
+        if(!is_dir($wdir)){
+            echo "\nCreating widget dir:".$wdir;
+            mkdir($wdir,0777,true);
+        }
+        else{
+            echo "\nWidget folder {$wdir} already exists!";
+            echo "\nYou want to change the name? (Yes|no):";
+            $option = trim(fgets(STDIN));
+            if($option == 'Yes'){
+                echo "\nEnter new name:";
+                $name = trim(fgets(STDIN));
+                return generateWidget($name);
+            }else if($option != 'no'){
+                echo "\nAborting...";
+                echo "\nWidget is not created";
+                return;
+            }
+        }
+        if(copy(__DIR__.'/__tools/widget/widget.html',$wdir.'widget.php')){
+            
+            copy(__DIR__.'/__tools/widget/widget.css',$wdir.'styles.php');
+            echo "\nWidget template is successfully generated in {$wdir}!";
+            echo "\nFinished...";
+            
+        }else{
+            echo "\nView folder {$wdir} is not accessible!";
         }
     }
 
