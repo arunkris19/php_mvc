@@ -1,7 +1,7 @@
 # php_mvc
 
-This is a light weight MVC framework created in PHP 7.2.
-This packege includes a script "mvc" in the root folder that can be used to generate controllers, views, or both together as a component.
+This is a lightweight MVC framework created in PHP 7.2.
+This package includes a script "mvc" in the root folder that can be used to generate controllers, views, or both together as a component.
 
 ### Usage:
 Create a component by running the following command from the root directory.
