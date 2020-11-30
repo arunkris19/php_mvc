@@ -120,8 +120,12 @@
     }
     
     function generateController($name,$config){
-        $name .= 'Controller';
+
         $template = file_get_contents(__DIR__.'/__tools/controller/controller.tpl');
+        /* updating the view name */
+        $template = str_replace('~VIEW_NAME~',strtolower($name),$template);
+        /* updating the controller name */
+        $name .= 'Controller';
         $template = str_replace('~CONTROLER_NAME~',ucwords($name),$template);
         $cfile = __DIR__.'/application/controllers/'.strtolower($name).'.php';
         if(file_Exists($cfile)){
