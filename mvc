@@ -9,7 +9,10 @@
     $switch = $commands[1]; // command (-g : generate,-d : delete)
     $type =  $commands[2]; // component type ( view, controller, helper, model)
     $name =  $commands[3]; // name of the component;
-    $config = explode('|',$commands[4]); // config flags;
+    $config = array();
+    if(isset($commands[4])){
+        $config = explode('|',$commands[4]); // config flags;
+    }
 
     switch($switch){
         case '-g':
@@ -34,7 +37,7 @@
             break;
             case 'component':
                 generateController($name,$config);
-                generateView($name);
+                generateView($name,$config);
             break;
             default:
                 echo "\nInvalid type specification:`".$type."`";
@@ -55,7 +58,7 @@
             if($option == 'Yes'){
                 echo "\nEnter new name:";
                 $name = trim(fgets(STDIN));
-                return generateWidget($name);
+                return generateWidget($name,$config);
             }else if($option != 'no'){
                 echo "\nAborting...";
                 echo "\nWidget is not created";
@@ -95,7 +98,7 @@
             if($option == 'Yes'){
                 echo "\nEnter new name:";
                 $name = trim(fgets(STDIN));
-                return generateView($name);
+                return generateView($name,$config);
             }else if($option != 'no'){
                 echo "\nAborting...";
                 echo "\nView is not created";
